@@ -18,6 +18,8 @@ gem 'uglifier', '>= 1.3.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'bootstrap-sass', '>= 3.3.7'
 gem 'jquery-rails', '>= 4.3.1'
+# Parse id_token from Google sign -in
+gem 'google-id-token', '1.4.2'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

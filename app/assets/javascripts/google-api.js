@@ -22,7 +22,8 @@ function gapiLoaded() {
 
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
-  console.log(profile.getEmail());
+  $('#id_token').val(googleUser.getAuthResponse().id_token);
+  $('#new_user').submit();
 }
 
 function onFailedSignIn(error) {
