@@ -1,2 +1,10 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<meta name="google-signin-client_id" content="233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com">
+
+<%= form_for @user, :html => { class: "logout_user" }, 
+                    url: logout_path, 
+                    method: "delete" do %>
+  <a href="" onclick="signOut()">Sign Out</a>
+<% end %>
+Hello, <%= @user.given_name %>
+
+<script src="https://apis.google.com/js/platform.js?onload=gapiLoaded" async defer></script>

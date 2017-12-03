@@ -22,6 +22,15 @@ function gapiLoaded() {
 
 function onSignIn(googleUser) {
   // refreshes token on sign in, extending token expiration
+  /**
+   * TODO this will send a POST request to /login on every page, which causes
+   * several problems, currently:
+   * 1) If a user is already logged in on the server, this is redundant, and will
+   *    log the user in a second time
+   * 2) You need some verification method to make sure the Google user and the
+   *    logged in user are the same; otherwise, you must do something. The default
+   *    behavior would be to just log the other user in, which probably isn't wise
+   */
   googleUser.reloadAuthResponse().then(() => {
     // add id_token to form parameters and submit the form
     $('#id_token').val(googleUser.getAuthResponse().id_token);
@@ -37,5 +46,6 @@ function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(() => {
     console.log('User signed out.');
+    $('.logout_user').submit();
   });
 }

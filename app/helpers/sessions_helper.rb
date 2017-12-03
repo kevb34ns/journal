@@ -5,6 +5,18 @@ module SessionsHelper
   end
 
   def log_out
+    session.delete :user_id
+    @current_user = nil
+  end
+
+  def current_user
+    if user_id = session[:user_id]
+      @current_user = User.find(session[:user_id])
+    end
+  end
+
+  def logged_in?
+    !current_user.nil?
   end
 
   def validate_id_token(raw_id_token)
