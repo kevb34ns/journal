@@ -21,9 +21,12 @@ function gapiLoaded() {
 }
 
 function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  $('#id_token').val(googleUser.getAuthResponse().id_token);
-  $('#new_user').submit();
+  // refreshes token on sign in, extending token expiration
+  googleUser.reloadAuthResponse().then(() => {
+    // add id_token to form parameters and submit the form
+    $('#id_token').val(googleUser.getAuthResponse().id_token);
+    $('#new_user').submit();
+  })
 }
 
 function onFailedSignIn(error) {
