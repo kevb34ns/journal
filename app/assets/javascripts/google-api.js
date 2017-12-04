@@ -1,6 +1,6 @@
 function gapiLoaded() {
   gapi.signin2.render('sign-in-button', {
-    'scope': 'profile email',
+    'scope': 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly',
     'longtitle': true,
     'theme': 'dark',
     'onsuccess': onSignIn,
@@ -9,14 +9,16 @@ function gapiLoaded() {
 
   var auth2;
   gapi.load('auth2', () => {
-    gapi.auth2.init({
-      client_id: '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com'
-    }).then(() => {
-      auth2 = gapi.auth2.getAuthInstance();
-      if (!auth2.isSignedIn.get()) {
-        $('#sign-in-button').css('display', 'block');
-      }
-    });
+
+    auth2 = gapi.auth2.getAuthInstance();
+    if (!auth2.isSignedIn.get()) {
+      $('#sign-in-button').css('display', 'block');
+    }
+    // gapi.auth2.init({
+    //   client_id: '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com',
+    //   scope: 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.readonly'
+    // }).then(() => {
+    // });
   }); 
 }
 

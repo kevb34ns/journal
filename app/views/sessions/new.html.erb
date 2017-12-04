@@ -1,6 +1,8 @@
 <meta name="google-signin-client_id" content="233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com">
+
 <%= form_for(@user, url: login_path) do |f| %>
   <div id="sign-in-button" style="display:none"></div>
   <input type="hidden" id="id_token" name="id_token">
 <% end %>
+
 <script src="https://apis.google.com/js/platform.js?onload=gapiLoaded" async defer></script>
