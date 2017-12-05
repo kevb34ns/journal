@@ -1,4 +1,8 @@
-function gapiLoaded() {
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly';
+const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com';
+const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+
+function authPlatformLoaded() {
   gapi.signin2.render('sign-in-button', {
     'scope': 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly',
     'longtitle': true,
@@ -9,17 +13,31 @@ function gapiLoaded() {
 
   var auth2;
   gapi.load('auth2', () => {
-
     auth2 = gapi.auth2.getAuthInstance();
     if (!auth2.isSignedIn.get()) {
       $('#sign-in-button').css('display', 'block');
     }
-    // gapi.auth2.init({
-    //   client_id: '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com',
-    //   scope: 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.readonly'
-    // }).then(() => {
-    // });
   }); 
+}
+
+function drivePlatformLoaded() {
+  var auth2;
+  gapi.load('auth2:client', () => {
+    gapi.client.init({
+      apiKey: 'AIzaSyCTeQrI1BY-9gwhf8Iyw1xRasmMH82oM2Q',
+      clientId: CLIENT_ID,
+      discoveryDocs: DISCOVERY_DOCS,
+      scope: SCOPES
+    }).then(() => {
+      // TODO handle changes to user sign-in state
+      gapi.client.drive.files.list({
+        'pageSize': 10,
+        'fields': "nextPageToken, files(id, name)"
+      }).then((response) => {
+        console.log(response.result.files);
+      })
+    })
+  });
 }
 
 function onSignIn(googleUser) {
