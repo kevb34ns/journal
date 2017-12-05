@@ -5,8 +5,6 @@ const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 function authPlatformLoaded() {
   gapi.signin2.render('sign-in-button', {
     'scope': 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly',
-    'longtitle': true,
-    'theme': 'dark',
     'onsuccess': onSignIn,
     'onfailure': onFailedSignIn
   });
@@ -29,13 +27,20 @@ function drivePlatformLoaded() {
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
     }).then(() => {
-      // TODO handle changes to user sign-in state
+      // TODO demo: handle changes to user sign-in state
       gapi.client.drive.files.list({
         'pageSize': 10,
         'fields': "nextPageToken, files(id, name)"
       }).then((response) => {
         console.log(response.result.files);
       })
+      
+      // TODO demo: get profile image
+      let profile = gapi.auth2.getAuthInstance()
+                              .currentUser.get()
+                              .getBasicProfile();
+      $(".profile-image").attr('src', profile.getImageUrl());
+      $(".profile-image").css('border-radius', "50%");
     })
   });
 }

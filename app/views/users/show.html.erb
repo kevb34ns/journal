@@ -1,10 +1,9 @@
-<meta name="google-signin-client_id" content="233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com">
-
 <%= form_for @user, :html => { class: "logout_user" }, 
                     url: logout_path, 
                     method: "delete" do %>
   <a href="" onclick="signOut()">Sign Out</a>
 <% end %>
 Hello, <%= @user.given_name %>
+<%= image_tag "", class: "profile-image" %>
 
 <script src="https://apis.google.com/js/platform.js?onload=drivePlatformLoaded" async defer></script>
