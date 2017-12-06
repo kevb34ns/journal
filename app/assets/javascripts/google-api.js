@@ -29,6 +29,8 @@ function drivePlatformLoaded() {
     }).then(() => {
       // TODO demo: handle changes to user sign-in state
       gapi.client.drive.files.list({
+        // TODO use this to find the id of the entries/ folder, and create it
+        // if needed. Put it in a separate function
         'pageSize': 10,
         'fields': "nextPageToken, files(id, name)"
       }).then((response) => {
@@ -65,6 +67,16 @@ function onSignIn(googleUser) {
 
 function onFailedSignIn(error) {
   console.log(error);
+}
+
+function createEntry() {
+  $.post({
+    url: "/entries",
+    dataType: "json",
+    success: (entry) => {
+      // TODO create a file with the name "#{entry.id}"
+    }
+  })
 }
 
 function signOut() {

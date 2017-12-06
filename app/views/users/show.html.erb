@@ -1,9 +1,19 @@
-<%= form_for @user, :html => { class: "logout_user" }, 
-                    url: logout_path, 
-                    method: "delete" do %>
-  <a href="" onclick="signOut()">Sign Out</a>
-<% end %>
-Hello, <%= @user.given_name %>
-<%= image_tag "", class: "profile-image" %>
+<section>
+  <section>
+    <%= image_tag "", class: "profile-image" %>
+    <%= @user.given_name %>
+  </section>
+  <section>
+    <%= form_for @user, :html => { class: "logout_user" }, 
+                        url: logout_path, 
+                        method: "delete" do |f| %>
+      <%= f.button "Sign Out", class: "btn btn-primary", onclick: "signOut()" %>
+    <% end %>
+  </section>
+  <section>
+    <%= text_area_tag "entry_field", nil, placeholder: "Write a new entry..." %>
+    <%= button_tag "Create Entry", class: "btn", onclick: "createEntry()" %>
+  </section>
+</section>
 
 <script src="https://apis.google.com/js/platform.js?onload=drivePlatformLoaded" async defer></script>
