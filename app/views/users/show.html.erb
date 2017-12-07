@@ -12,7 +12,7 @@
   </section>
   <section>
     <%= text_area_tag "entry_field", nil, placeholder: "Write a new entry..." %>
-    <%= button_tag "Create Entry", class: "btn", onclick: "createEntry()" %>
+    <%= button_tag "Create Entry", class: "btn", onclick: "createEntry($('#entry_field').val())" %>
   </section>
 </section>
 

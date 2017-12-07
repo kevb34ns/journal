@@ -3,7 +3,9 @@ const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleuser
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 const ENTRY_FOLDER = 'entries';
+
 let entryFolderId;
+let drive;
 
 function authPlatformLoaded() {
   gapi.signin2.render('sign-in-button', {
@@ -31,7 +33,13 @@ function drivePlatformLoaded() {
       scope: SCOPES
     }).then(() => {
       // TODO handle changes to user sign-in state
-      gapi.client.drive.files.list({
+      // TODO refactor this for re-usability
+      drive = gapi.client.drive;
+      if(drive === undefined) {
+        return;
+      }
+
+      drive.files.list({
         // find the entries/ folder in the appDataFolder, or create it
         'q': "mimeType='application/vnd.google-apps.folder' and \
                           name='" + ENTRY_FOLDER + "' and \
@@ -41,7 +49,7 @@ function drivePlatformLoaded() {
       }).then((response) => {
         if (response.result.files.length == 0) {
           // create entries folder
-          gapi.client.drive.files.create({
+          drive.files.create({
             'name': ENTRY_FOLDER,
             'mimeType': 'application/vnd.google-apps.folder',
             'parents': ['appDataFolder'],
@@ -86,12 +94,22 @@ function onFailedSignIn(error) {
   console.log(error);
 }
 
-function createEntry() {
+function createEntry(text) {
+  if (drive === undefined) {
+    //TODO an error has occurred, drive is not loaded
+    return false;
+  }
+  
   $.post({
     url: "/entries",
     dataType: "json",
     success: (entry) => {
-      // TODO create a file with the name "#{entry.id}"
+      // TODO create a file in the drive with the name "#{entry.id}"
+      drive.files.create({
+        'name': `${entry.id}`,
+        'mimeType': 'text/plain',
+        'parents': [`${entryFolderId}`]
+      }).then((response) => console.log(response))
     }
   })
 }
