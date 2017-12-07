@@ -2,6 +2,9 @@ const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.google
 const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com';
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
+const ENTRY_FOLDER = 'entries';
+let entryFolderId;
+
 function authPlatformLoaded() {
   gapi.signin2.render('sign-in-button', {
     'scope': 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly',
@@ -27,15 +30,29 @@ function drivePlatformLoaded() {
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
     }).then(() => {
-      // TODO demo: handle changes to user sign-in state
+      // TODO handle changes to user sign-in state
       gapi.client.drive.files.list({
-        // TODO use this to find the id of the entries/ folder, and create it
-        // if needed. Put it in a separate function
-        'pageSize': 10,
-        'fields': "nextPageToken, files(id, name)"
+        // find the entries/ folder in the appDataFolder, or create it
+        'q': "mimeType='application/vnd.google-apps.folder' and \
+                          name='" + ENTRY_FOLDER + "' and \
+                          'appDataFolder' in parents",
+        'spaces': "appDataFolder",
+        'fields': "files(id, name)"
       }).then((response) => {
-        console.log(response.result.files);
-      })
+        if (response.result.files.length == 0) {
+          // create entries folder
+          gapi.client.drive.files.create({
+            'name': ENTRY_FOLDER,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'parents': ['appDataFolder'],
+            'fields': 'id'  
+          }).then((response) => {
+            entryFolderId = response.result.id;
+          });
+        } else {
+          entryFolderId = response.result.files[0].id;
+        }
+      });
       
       // TODO demo: get profile image
       let profile = gapi.auth2.getAuthInstance()
