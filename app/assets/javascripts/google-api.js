@@ -94,24 +94,36 @@ function onFailedSignIn(error) {
   console.log(error);
 }
 
-function createEntry(text) {
+function createEntry(title, text) {
   if (drive === undefined) {
     //TODO an error has occurred, drive is not loaded
     return false;
   }
   
-  $.post({
-    url: "/entries",
-    dataType: "json",
-    success: (entry) => {
-      // TODO create a file in the drive with the name "#{entry.id}"
-      drive.files.create({
-        'name': `${entry.id}`,
-        'mimeType': 'text/plain',
-        'parents': [`${entryFolderId}`]
-      }).then((response) => console.log(response))
-    }
-  })
+  drive.files.create({
+    'name': generateTitle(title),
+    'mimeType': 'text/plain',
+    'parents': [`${entryFolderId}`],
+    'fields': 'id'
+  }).then((response) => {
+    $.post({
+      url: "/entries",
+      data: { "file_id": response.result.id },
+      dataType: "application/json",
+      success: (entry) => {
+        // TODO verify success
+      }
+    });
+  });
+}
+
+function generateTitle(title) {
+  var result = title.trim();
+  if (result.length != 0) {
+    return result;
+  } else {
+    return "Untitled Entry";
+  }
 }
 
 function signOut() {
