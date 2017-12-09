@@ -9,7 +9,7 @@ let drive;
 
 function authPlatformLoaded() {
   gapi.signin2.render('sign-in-button', {
-    'scope': 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly',
+    'scope': SCOPES,
     'onsuccess': onSignIn,
     'onfailure': onFailedSignIn
   });
@@ -42,8 +42,8 @@ function drivePlatformLoaded() {
       drive.files.list({
         // find the entries/ folder in the appDataFolder, or create it
         'q': "mimeType='application/vnd.google-apps.folder' and \
-                          name='" + ENTRY_FOLDER + "' and \
-                          'appDataFolder' in parents",
+              name='" + ENTRY_FOLDER + "' and \
+              'appDataFolder' in parents",
         'spaces': "appDataFolder",
         'fields': "files(id, name)"
       }).then((response) => {
@@ -59,6 +59,7 @@ function drivePlatformLoaded() {
           });
         } else {
           entryFolderId = response.result.files[0].id;
+          displayEntries();
         }
       });
       
@@ -109,10 +110,33 @@ function createEntry(title, text) {
     $.post({
       url: "/entries",
       data: { "file_id": response.result.id },
-      dataType: "application/json",
+      dataType: "json",
       success: (entry) => {
-        // TODO verify success
+        // TODO get created at date and set in UI
+        console.log(entry);
+      },
+      error: (err) => {
+        console.log(err);
       }
+    });
+  });
+}
+
+function displayEntries() {
+  if (drive === undefined) {
+    return false;
+  }
+
+  drive.files.list({
+    // find the entries/ folder in the appDataFolder, or create it
+    'q': "mimeType='text/plain' and '" +
+          entryFolderId + "' in parents",
+    'spaces': "appDataFolder",
+    'fields': "files(id, name)"
+  }).then((response) => {
+    response.result.files.forEach((file) => {
+      $(`#entry_${file.id} .entry_title`).text(file.name);
+      //TODO download and set file content without exceeding rate limit...
     });
   });
 }
