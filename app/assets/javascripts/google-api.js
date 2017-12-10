@@ -1,4 +1,4 @@
-const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.metadata.readonly';
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
 const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com';
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
@@ -41,9 +41,9 @@ function drivePlatformLoaded() {
 
       drive.files.list({
         // find the entries/ folder in the appDataFolder, or create it
-        'q': "mimeType='application/vnd.google-apps.folder' and \
-              name='" + ENTRY_FOLDER + "' and \
-              'appDataFolder' in parents",
+        'q': `mimeType='application/vnd.google-apps.folder' and \
+              name='${ENTRY_FOLDER}' and \
+              'appDataFolder' in parents`,
         'spaces': "appDataFolder",
         'fields': "files(id, name)"
       }).then((response) => {
@@ -101,6 +101,7 @@ function createEntry(title, text) {
     return false;
   }
   
+  // TODO does not actually upload file content, only metadata
   drive.files.create({
     'name': generateTitle(title),
     'mimeType': 'text/plain',
@@ -128,15 +129,19 @@ function displayEntries() {
   }
 
   drive.files.list({
-    // find the entries/ folder in the appDataFolder, or create it
-    'q': "mimeType='text/plain' and '" +
-          entryFolderId + "' in parents",
+    'q': `mimeType='text/plain' and \
+          '${entryFolderId}' in parents`,
     'spaces': "appDataFolder",
-    'fields': "files(id, name)"
+    'fields': "files(id, name)",
+    'orderBy': "createdTime desc"
   }).then((response) => {
-    response.result.files.forEach((file) => {
-      $(`#entry_${file.id} .entry_title`).text(file.name);
-      //TODO download and set file content without exceeding rate limit...
+    response.result.files.forEach((file, index) => {
+      var entry = $(`.entry#${file.id}`);
+      entry.find('.entry_title').text(file.name);
+      if (entry[0] === $('.entries_list .entry:first-of-type')[0]) {
+        // Download text of first entry and set the entry display section
+        $('#entry_text').text(downloadEntry(file.id));
+      }
     });
   });
 }
@@ -148,6 +153,22 @@ function generateTitle(title) {
   } else {
     return "Untitled Entry";
   }
+}
+
+/**
+ * TODO Download a file from Drive and return its contents as a string.
+ * @param {string} fileId The Drive id of the desired file.
+ * @return {string} The contents of the desired file.
+ */
+function downloadEntry(fileId) {
+  if (drive === undefined) {
+    return null
+  }
+  
+  drive.files.get({
+    'fileId': fileId,
+    'alt': 'media'
+  }).then((response) => console.log(response));
 }
 
 function signOut() {
