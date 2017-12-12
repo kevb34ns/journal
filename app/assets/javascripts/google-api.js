@@ -160,10 +160,16 @@ function displayEntries() {
   }).then((response) => {
     response.result.files.forEach((file, index) => {
       var entry = $(`.entry#${file.id}`);
+      if (entry.length === 0) {
+        return;
+      }
+
       entry.find('.entry_title').text(file.name);
       if (entry[0] === $('.entries_list .entry:first-of-type')[0]) {
         // Download text of first entry and set the entry display section
-        $('#entry_text').text(downloadEntry(file.id));
+        downloadEntry(file.id).then((response) => {
+          $('#entry_text').text(response.body);
+        });
       }
     });
   });
@@ -179,7 +185,7 @@ function generateTitle(title) {
 }
 
 /**
- * TODO Download a file from Drive and return its contents as a string.
+ * Download a file from Drive and return the response as a Promise.
  * @param {string} fileId The Drive id of the desired file.
  * @return {string} The contents of the desired file.
  */
@@ -188,10 +194,10 @@ function downloadEntry(fileId) {
     return null
   }
   
-  drive.files.get({
+  return drive.files.get({
     'fileId': fileId,
     'alt': 'media'
-  }).then((response) => console.log(response));
+  });
 }
 
 function signOut() {
