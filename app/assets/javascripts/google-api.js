@@ -95,32 +95,55 @@ function onFailedSignIn(error) {
   console.log(error);
 }
 
+function uploadFile(name, content, mimeType, folderId) {
+  var boundary = Math.random().toString(36).slice(2);
+  var requestType = `multipart/related; boundary="${boundary}"`;
+  var metadata = {
+    'name': name,
+    'mimeType': mimeType,
+    'parents': [folderId]
+  };
+
+  var body = 
+    `\r\n--${boundary}\r\n` +
+    `Content-Type: application/json; charset=UTF=8\r\n\r\n` +
+    `${JSON.stringify(metadata)}\r\n` +
+    `\r\n--${boundary}\r\n` +
+    `Content-Type: text/plain\r\n\r\n${content}` +
+    `\r\n--${boundary}--`;
+
+  return gapi.client.request({
+    'path': '/upload/drive/v3/files',
+    'method': 'POST',
+    'params': { 'uploadType': 'multipart' },
+    'headers': { 'Content-Type': requestType },
+    'body': body
+  });
+}
+
 function createEntry(title, text) {
   if (drive === undefined) {
     //TODO an error has occurred, drive is not loaded
     return false;
   }
-  
-  // TODO does not actually upload file content, only metadata
-  drive.files.create({
-    'name': generateTitle(title),
-    'mimeType': 'text/plain',
-    'parents': [`${entryFolderId}`],
-    'fields': 'id'
-  }).then((response) => {
-    $.post({
-      url: "/entries",
-      data: { "file_id": response.result.id },
-      dataType: "json",
-      success: (entry) => {
-        // TODO get created at date and set in UI
-        console.log(entry);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-  });
+
+  uploadFile(generateTitle(title), text, 'text/plain', entryFolderId).then(
+    (response) => {
+      console.log(response);
+      $.post({
+        url: "/entries",
+        data: { "file_id": response.result.id },
+        dataType: "json",
+        success: (entry) => {
+          // TODO get created at date and set in UI
+          console.log(entry);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
+    }
+  );
 }
 
 function displayEntries() {
