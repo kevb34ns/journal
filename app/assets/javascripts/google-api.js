@@ -167,9 +167,7 @@ function displayEntries() {
       entry.find('.entry_title').text(file.name);
       if (entry[0] === $('.entries_list .entry:first-of-type')[0]) {
         // Download text of first entry and set the entry display section
-        downloadEntry(file.id).then((response) => {
-          $('#entry_text').text(response.body);
-        });
+        displayEntry(file.id);
       }
     });
   });
@@ -182,6 +180,12 @@ function generateTitle(title) {
   } else {
     return "Untitled Entry";
   }
+}
+
+function displayEntry(fileId) {
+  downloadEntry(fileId).then((response) => {
+    $('#entry_text').text(response.body);
+  });  
 }
 
 /**

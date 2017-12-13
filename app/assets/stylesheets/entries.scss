@@ -9,6 +9,10 @@
   margin-bottom: 1rem;
 }
 
+.entry {
+  cursor: pointer;
+}
+
 #title_field {
   @include text_field_default();
   width: 30rem;
