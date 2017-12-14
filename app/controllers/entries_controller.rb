@@ -1,7 +1,6 @@
 class EntriesController < ApplicationController
 
   def create
-    puts params
     @entry = current_user.entries.build file_id: params[:file_id],
                                         picture: params[:picture]
     if @entry.save

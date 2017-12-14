@@ -27,14 +27,7 @@
   <section>
     <% if @user.entries.any? %>
       <ol class="entries_list">
-        <% @entries.each do |entry| %>
-          <li class="entry" 
-              id="<%= entry.file_id %>" 
-              onclick="displayEntry('<%= entry.file_id %>')">
-            <p class="entry_title"></p>
-            <p class="entry_date">Created at <%= entry.created_at %></p>
-          </li>
-        <% end %>
+        <%= render @entries %>
       </ol>
     <% end %>
   </section>

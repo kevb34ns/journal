@@ -135,8 +135,7 @@ function createEntry(title, text) {
         data: { "file_id": response.result.id },
         dataType: "json",
         success: (entry) => {
-          // TODO get created at date and set in UI
-          console.log(entry);
+          location.reload();
         },
         error: (err) => {
           console.log(err);
