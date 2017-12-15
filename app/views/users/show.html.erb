@@ -1,15 +1,5 @@
 <section>
-  <section>
-    <%= image_tag "", class: "profile-image" %>
-    <%= @user.given_name %>
-  </section>
-  <section>
-    <%= form_for @user, :html => { class: "logout_user" }, 
-                        url: logout_path, 
-                        method: "delete" do |f| %>
-      <%= f.button "Sign Out", class: "btn btn-primary", onclick: "signOut()" %>
-    <% end %>
-  </section>
+  <%= render 'users/header' %>
   <section>
     <section>
       <%= text_field_tag "title_field", nil, placeholder: "Title" %>

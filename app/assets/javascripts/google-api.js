@@ -68,7 +68,6 @@ function drivePlatformLoaded() {
                               .currentUser.get()
                               .getBasicProfile();
       $(".profile-image").attr('src', profile.getImageUrl());
-      $(".profile-image").css('border-radius', "50%");
     })
   });
 }

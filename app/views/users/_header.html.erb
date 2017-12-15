@@ -1,0 +1,9 @@
+<section class="header">
+  <%= image_tag "", class: "profile-image" %>
+  <%= @user.given_name %>
+  <%= form_for @user, :html => { class: "logout_user" }, 
+                      url: logout_path, 
+                      method: "delete" do |f| %>
+    <%= f.button "Sign Out", class: "btn btn-primary", onclick: "signOut()" %>
+  <% end %>
+</section>
