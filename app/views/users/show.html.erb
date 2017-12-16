@@ -1,28 +1,21 @@
-<section>
+<section class="container">
   <%= render 'users/header' %>
-  <section>
-    <section>
-      <%= text_field_tag "title_field", nil, placeholder: "Title" %>
-    </section>
-    <section>
-      <%= text_area_tag "entry_field", nil, placeholder: "Write a new entry..." %>
-    </section>
-    <section>
-      <%= button_tag "Create Entry", class: "btn", 
-                                     onclick: "createEntry(
-                                                $('#title_field').val(),
-                                                $('#entry_field').val())" %>
-    </section>
+  <section class="entry_input">
+    <%= text_field_tag "title_field", nil, placeholder: "Title" %>
+    <%= text_area_tag "entry_field", nil, placeholder: "Write a new entry..." %>
+    <%= button_tag "Create Entry", class: "btn btn-primary", 
+                                    onclick: "createEntry(
+                                              $('#title_field').val(),
+                                              $('#entry_field').val())" %>
   </section>
-  <section>
+  <section class="menu">
     <% if @user.entries.any? %>
       <ol class="entries_list">
         <%= render @entries %>
       </ol>
     <% end %>
+    <section id="entry_text"></section>
   </section>
-</section>
-<section id="entry_text">
 </section>
 
 <script src="https://apis.google.com/js/platform.js?onload=drivePlatformLoaded" async defer></script>
