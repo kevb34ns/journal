@@ -3,17 +3,32 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 @mixin text_field_default() {
-  border: 1px solid lightgray;
+  border: 1px solid #e8e8e8;
+  padding: 1rem;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .entry {
   cursor: pointer;
+
+  &:hover {
+    background-color: #e8e8e8;
+  }
+
+  .entry_title {
+    font-weight: bold;
+  }
 }
 
 #title_field {
   @include text_field_default();
   width: 100%;
   border-bottom: none;
+  font-weight: bold;
+  font-size: 2.5rem;
 }
 
 #entry_field {
@@ -22,5 +37,6 @@
   resize: none;
   border-top: none;
   flex: 1;
+  font-size: 1.75rem;
   margin-bottom: 1rem;
 }

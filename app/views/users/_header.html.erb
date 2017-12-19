@@ -13,10 +13,10 @@
             </li>
             <li class="divider"></li>
             <li>
+              <%= link_to "Sign Out", "", onclick: "signOut()" %>
               <%= form_for @user, :html => { class: "logout_user" }, 
                                 url: logout_path, 
                                 method: "delete" do |f| %>
-                <%= f.button "Sign Out", class: "btn btn-primary", onclick: "signOut()" %>
               <% end %>
             </li>
           </ul>
