@@ -120,11 +120,20 @@ function uploadFile(name, content, mimeType, folderId) {
   });
 }
 
-function createEntry(title, text) {
+function extractTitle(text) {
+
+  var i = text.indexOf('\n');
+
+  return text.slice(0, i).trim();
+}
+
+function createEntry(text) {
   if (drive === undefined) {
     //TODO an error has occurred, drive is not loaded
     return false;
   }
+
+  var title = extractTitle(text);
 
   uploadFile(generateTitle(title), text, 'text/plain', entryFolderId).then(
     (response) => {
@@ -182,7 +191,7 @@ function generateTitle(title) {
 
 function displayEntry(fileId) {
   downloadEntry(fileId).then((response) => {
-    $('#entry_text').text(response.body);
+    $('#entry_field').text(response.body);
   });  
 }
 

@@ -1,11 +1,9 @@
 <section class="outer_container">
   <%= render 'users/header' %>
   <section class="entry_input">
-    <%= text_field_tag "title_field", nil, placeholder: "Title" %>
     <%= text_area_tag "entry_field", nil, placeholder: "Write a new entry..." %>
     <%= button_tag "Create Entry", class: "btn btn-primary", 
                                     onclick: "createEntry(
-                                              $('#title_field').val(),
                                               $('#entry_field').val())" %>
   </section>
   <section class="menu">
@@ -14,7 +12,6 @@
         <%= render @entries %>
       </ol>
     <% end %>
-    <section id="entry_text"></section>
   </section>
 </section>
 
