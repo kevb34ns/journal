@@ -1,0 +1,162 @@
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (9.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (6.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20171130053828)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "given_name" varchar, "family_name" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20171130053828"]]
+  [1m[35m (6.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateEntries (20171201031735)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "entries" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "picture" varchar, "user_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, CONSTRAINT "fk_rails_99dc12d4fd"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE  INDEX "index_entries_on_user_id" ON "entries" ("user_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE  INDEX "index_entries_on_user_id_and_created_at" ON "entries" ("user_id", "created_at")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20171201031735"]]
+  [1m[35m (8.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateNotebooks (20171201032238)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "notebooks" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "user_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, CONSTRAINT "fk_rails_d5906d44d9"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "index_notebooks_on_user_id" ON "notebooks" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20171201032238"]]
+  [1m[35m (4.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddSubToUsers (20171203061743)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "users" ADD "sub" varchar[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_sub" ON "users" ("sub")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20171203061743"]]
+  [1m[35m (14.0ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddFileIdToEntries (20171208004145)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "entries" ADD "file_id" varchar[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id_and_created_at' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id_and_created_at' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_entries_on_user_id_and_file_id" ON "entries" ("user_id", "file_id")[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20171208004145"]]
+  [1m[35m (11.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-23 06:07:20.320289"], ["updated_at", "2018-01-23 06:07:20.320289"]]
+  [1m[35m (4.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id_and_file_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id_and_file_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id_and_created_at' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id_and_created_at' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_entries_on_user_id' AND type='index'
+[0m
+  [1m[35m (0.5ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_notebooks_on_user_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_notebooks_on_user_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_users_on_sub' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_users_on_sub' AND type='index'
+[0m
+Started GET "/" for 127.0.0.1 at 2018-01-22 22:07:34 -0800
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#show as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 14ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2018-01-22 22:07:35 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (3.0ms)
+[Webpacker] Compiling…
+[Webpacker] Compiled all packs in C:/Users/Kevin/Repositories/journal/public/packs
+Completed 200 OK in 29937ms (Views: 29781.2ms | ActiveRecord: 12.5ms)
+
+
+Started POST "/login" for 127.0.0.1 at 2018-01-22 22:08:41 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"TZ9w3T2rz+WlhWBQWGHpGekph1HAr5CoBkgy8RRbTFL4RDy8bY/wbfalBvneLVmVLY+umloym9nX/FLkBcQOAw==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI0YmY4MzIwNzE4OWFkMzQwOWI2YTJlYWQ4Y2M3NjNmMWI5MWRiNjQifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDM3MDAwNDk1NzkzNDUxNzI4NTUiLCJlbWFpbCI6ImtldmIzNG5zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiN3p6QlVDV1ZLU2xjbWtxeVQwdmhhdyIsImV4cCI6MTUxNjY5MTMyMSwiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImp0aSI6IjQ4NTBiNDY2ZTdiNTIxY2ZiNTE0NmY0YjAyZjYyNjY4OTk1NmJhMjAiLCJpYXQiOjE1MTY2ODc3MjEsIm5hbWUiOiJLZXZpbiBZYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQnJyUUUyWVFFd0kvQUFBQUFBQUFBQUkvQUFBQUFBQUFDUXcvbE93VmpjdnZLN00vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.UmCtP2PyUH0kez019VAuFCKJivlywDFtVCZJ3CtG1jJZn-iXr6Ij6fxEEtme-xt74h1bK_ctKkPlfrImfWGjZ32k13DNHmbKGVkR1I_rYS6WN9D0cfSNcpAhdc0ZCMh4pvm_wsbKAgxSFeI8qmlKmXOIudTF1C6Dsotayf8iM9lY0y7ZLR4C863vSTjaqz_-Gu0fF7VSmwY4cBo2pPzuCQi3C-xzy4qIanOjgb7Rm5I6Pxmmgzufi_bGPPle8sHjMUUtDQK0xr2hqT6YgLrlouQ7DR9yleGkVkzlMTBMtq6LJDSTa8WttR8PcWYelPomfWetkelCloGnJ5X4p9K1aQ"}
+Completed 500 Internal Server Error in 190ms (ActiveRecord: 0.0ms)
+
+
+  
+OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: certificate verify failed):
+  
+app/helpers/sessions_helper.rb:24:in `validate_id_token'
+app/controllers/sessions_controller.rb:10:in `create'
+Started GET "/" for 127.0.0.1 at 2018-01-22 22:09:12 -0800
+Processing by UsersController#show as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 1ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2018-01-22 22:09:12 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 375ms (Views: 307.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login" for 127.0.0.1 at 2018-01-22 22:09:14 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"7qHGzskftKnzzRMBIioeoIL1g0nO13q9wl+EP3r7S7pbeoqvmTuLIaDtdaikZq4sRlOqglRKccwT6+Qqa2QJ6w==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI0YmY4MzIwNzE4OWFkMzQwOWI2YTJlYWQ4Y2M3NjNmMWI5MWRiNjQifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDM3MDAwNDk1NzkzNDUxNzI4NTUiLCJlbWFpbCI6ImtldmIzNG5zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiekJJXzVKUTRtQ3lMRVkwd3RheUtvZyIsImV4cCI6MTUxNjY5MTM1NCwiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImp0aSI6IjI1ZWIzYzUxNGRkMzdiOWMxYmJlMzY3MDA2MGJhNTQzMjQyNmMyNzYiLCJpYXQiOjE1MTY2ODc3NTQsIm5hbWUiOiJLZXZpbiBZYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQnJyUUUyWVFFd0kvQUFBQUFBQUFBQUkvQUFBQUFBQUFDUXcvbE93VmpjdnZLN00vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.nMxEltFR0bCMoSXHNN6w5buDIlDZUc4HrmtmYQGXZiLUChhNlikEuOqBZuKgm-0SSvgOKRJJ7gPnAIuTpZe7LIdZEXNTaCRxnRhjdjuUOpZwN0zbuSqPcoU0TKAWugIlwV5ALRLbBtjI_GRvrdima0sAhisywCjpONjW1J_bf6xPf07fBBfI6IrB-QXWYV91y93R60iT_vpgIHQ33urU3Pj-gkYNr65duut04SC91MRKQzGHJdZ2RPOWQSmUr_uvrBxm21h987a2RP8BrH1wSj4SnaugOp8HyzFM-K2wfne3IK9OJyGOzE2Ny-DXDClkGX2ZkLYpgl0QLJ_2E83s-Q"}
+Completed 500 Internal Server Error in 197ms (ActiveRecord: 0.0ms)
+
+
+  
+OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: certificate verify failed):
+  
+app/helpers/sessions_helper.rb:24:in `validate_id_token'
+app/controllers/sessions_controller.rb:10:in `create'
