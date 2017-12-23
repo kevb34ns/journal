@@ -160,3 +160,306 @@ OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: certificate 
   
 app/helpers/sessions_helper.rb:24:in `validate_id_token'
 app/controllers/sessions_controller.rb:10:in `create'
+Started GET "/" for ::1 at 2018-01-31 20:21:35 -0800
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#show as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Completed 404 Not Found in 37ms (ActiveRecord: 4.6ms)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find User with 'id'=2):
+  
+app/helpers/sessions_helper.rb:14:in `current_user'
+app/helpers/sessions_helper.rb:19:in `logged_in?'
+app/controllers/users_controller.rb:16:in `logged_in_user'
+  [1m[36mUser Load (1.9ms)[0m  [1m[34mSELECT  "users".* FROM "users" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+Started GET "/" for ::1 at 2018-01-31 20:22:50 -0800
+Processing by UsersController#show as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for ::1 at 2018-01-31 20:22:50 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (3.7ms)
+Completed 200 OK in 4894ms (Views: 4881.1ms | ActiveRecord: 1.1ms)
+
+
+Started POST "/login" for ::1 at 2018-01-31 20:22:58 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"n93koOil1l8uE2qAmu6jMIXAAEmKTkDnmX3k+YjxKPzyaWJRBbUeG2y9upzbKyW/QTzhBCYPL667oBPvMbyVSA==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2YzAxOGIyMzNmZTJlZWY0N2ZlZGJiZGQ5Mzk4MTcwZmM5YjI5ZDgifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDg2NjQwNDgxMzg0MDcxMDk5NTQiLCJlbWFpbCI6Imtldmlua2F5eWFuZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6Ik16amRoa1A5T21VM2pCSGVUZ3R5LVEiLCJleHAiOjE1MTc0NjI1NzgsImlzcyI6ImFjY291bnRzLmdvb2dsZS5jb20iLCJqdGkiOiI1MGQ2ZmZlM2M0MDE2N2EyYzM5MDZlZTIwM2NhMzkzZGViOTUwYTJlIiwiaWF0IjoxNTE3NDU4OTc4LCJuYW1lIjoiS2V2aW4gWWFuZyIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLV9oWjFpV21CX3pJL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FBNlpQVDRuTFlhTHk1VXJRNDU0WHUzTDNLano4V256SEEvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.1qqiggDqG6serx7OhKLgnwhrBxxOAbIt8yb4JB1A_NgYI6m688UicRbwtPgjoqLxRnHF04nDWtNDgqh7PENCWihdZfdcEOICT4mdoKunXvdOzpMQF7sZZGE2jBgkfbEx8c16yJOrgnTokOMNKH0QLaqdjBFEJ0JUzm-MZXwsY5r1P5mp3HMAmomSryXPEo2qb8XA7rXYQYHACDXAruQXP-L4l7XbFRJgCGTm7lV_va0MsFRZFtJ9uczIcunFFyaddyofuuDVr_TuQI0IodscUoNpqDbZGb7nOoi8JkdIQ8CB5N9nZ1jxHXFTCtqQu-K3FpJR89UKq427XRDinH9vJg"}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."sub" = ? LIMIT ?[0m  [["sub", "108664048138407109954"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35mSQL (1.8ms)[0m  [1m[32mINSERT INTO "users" ("given_name", "family_name", "created_at", "updated_at", "sub") VALUES (?, ?, ?, ?, ?)[0m  [["given_name", "Kevin"], ["family_name", "Yang"], ["created_at", "2018-02-01 04:22:58.514650"], ["updated_at", "2018-02-01 04:22:58.514650"], ["sub", "108664048138407109954"]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 391ms (ActiveRecord: 3.5ms)
+
+
+Started GET "/users/1" for ::1 at 2018-01-31 20:22:58 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_header.html.erb (1.9ms)
+  [1m[36mEntry Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 1], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (15.0ms)
+Completed 200 OK in 94ms (Views: 66.1ms | ActiveRecord: 1.2ms)
+
+
+Started GET "/users/1" for ::1 at 2018-01-31 20:24:27 -0800
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 16ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for ::1 at 2018-01-31 20:24:27 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (3.8ms)
+Completed 200 OK in 1685ms (Views: 1623.1ms | ActiveRecord: 2.8ms)
+
+
+Started POST "/login" for ::1 at 2018-01-31 20:24:30 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"4CEXF+Z0aeeuhfhcv7dnXkAjB7TgssNpVh6V783kYMotB6jvC7ryOAi9FqbzC31MFQudsglArGxmkM8KpHeGZQ==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2YzAxOGIyMzNmZTJlZWY0N2ZlZGJiZGQ5Mzk4MTcwZmM5YjI5ZDgifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDg2NjQwNDgxMzg0MDcxMDk5NTQiLCJlbWFpbCI6Imtldmlua2F5eWFuZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IkZJU1RraXBkS0dHLXdoak1NQ29oNXciLCJleHAiOjE1MTc0NjI2NzAsImlzcyI6ImFjY291bnRzLmdvb2dsZS5jb20iLCJqdGkiOiI0MWJjODBmYWQ4YzdiZmUwMjgxZmM1NThmNjc1MzIwNWNhOWM5OGRlIiwiaWF0IjoxNTE3NDU5MDcwLCJuYW1lIjoiS2V2aW4gWWFuZyIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLV9oWjFpV21CX3pJL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FBNlpQVDRuTFlhTHk1VXJRNDU0WHUzTDNLano4V256SEEvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.kMREJ5L4LKFf-GKxJQwWTqaqBdvuV7n_dU8yxqDtxL2a4UTuPmWgmLwZIIG2QiKjPqxZdS1YzYfVQBYQc2BU-W2g655FUj6-Y5j_wOK3WkSNVkAmFDzSj1dFl-8890o58IQ6tBCmhzB2M6mp5Yr5kKiOS3z5h5qK9ADewutsh_JBUMHOKK0X418eo_ujNaHqtnQTCHdl0b9c0can-bP8rHz5OHgl1dtREdGGPEuvjvGIcrieffJrCfeHaxPkc-kDNVCERMSG90nRsZ7waJdcEwrcyz0YVTezdRQiXZiqMOi7tj3KC_rnb42fFw2DZoeJa2XITGELZi2XfBqVfLS3PQ"}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."sub" = ? LIMIT ?[0m  [["sub", "108664048138407109954"], ["LIMIT", 1]]
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 444ms (ActiveRecord: 1.0ms)
+
+
+Started GET "/users/1" for ::1 at 2018-01-31 20:24:30 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_header.html.erb (3.0ms)
+  [1m[36mEntry Exists (0.8ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 1], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (72.9ms)
+Completed 200 OK in 238ms (Views: 171.9ms | ActiveRecord: 1.8ms)
+
+
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT  "users".* FROM "users" LIMIT ?[0m  [["LIMIT", 11]]
+Started GET "/users/1" for ::1 at 2018-01-31 20:39:44 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_header.html.erb (2.6ms)
+  [1m[36mEntry Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 1], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (14.2ms)
+Started DELETE "/logout" for ::1 at 2018-01-31 20:39:45 -0800
+Processing by SessionsController#destroy as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"S6I0U6zyDmH8bPR2Lecnl0/u1TX7qytYCRkgJjms4tOGhIurQTyVvlpUGoxhWz2FGsZPMxJZRF05l3rDUD8EfA=="}
+Redirected to http://localhost:3000/
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/" for ::1 at 2018-01-31 20:39:45 -0800
+Processing by UsersController#show as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 3ms (ActiveRecord: 0.0ms)
+
+
+Completed 200 OK in 92ms (Views: 84.4ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/login" for ::1 at 2018-01-31 20:39:45 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (0.8ms)
+Completed 200 OK in 63ms (Views: 60.8ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login" for ::1 at 2018-01-31 20:39:52 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"5PJme54e8mbOEgl3g0OyDMEvUYmiHltdi1H/N55pF84p1NmDc9BpuWgq543P/6gelAfLj0vsNFi736XS9/rxYQ==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2YzAxOGIyMzNmZTJlZWY0N2ZlZGJiZGQ5Mzk4MTcwZmM5YjI5ZDgifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDg2NjQwNDgxMzg0MDcxMDk5NTQiLCJlbWFpbCI6Imtldmlua2F5eWFuZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6ImFHR3N4VzZ5c0FXbjZmeGJDUUxjN3ciLCJleHAiOjE1MTc0NjM1OTIsImlzcyI6ImFjY291bnRzLmdvb2dsZS5jb20iLCJqdGkiOiIzOGUwMGM1YTI1OTQwNzJmMjhhYTNkZjAyODZjZjBmMDU4YTFjOTlmIiwiaWF0IjoxNTE3NDU5OTkyLCJuYW1lIjoiS2V2aW4gWWFuZyIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLV9oWjFpV21CX3pJL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FBNlpQVDRuTFlhTHk1VXJRNDU0WHUzTDNLano4V256SEEvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.av2Z3zPjircngYQQnT0hDjPsS7V5W2A8hIukr2n-y8SCuzsOrc5n3eQpEI2f7mgx0mhfaqNaZOmZZwDbEPw-GO5sbna6RDBb95F8_WvY9d7DdOMxN6AowHcRWqDcbMdkPTxUqF5xg4kuXtn1B5b2pWzFC3OLM4hvCuVNU5vYD9ngX3cwakaQmtIhmBZMn9XX8Bq_YNtHLyOGPeUrthTI1nB7d8Cewqe-4xEbBIWOljsaGJ0hGY1P420U_l8pQnujXHX0q4v6P6viM0fNveYfRx0N3Z0n84gp1-DBViLGJT3V6W1sR9TjqXfJw2JHqXDwZWwPWusU4aI3jJWqgDRRLQ"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."sub" = ? LIMIT ?[0m  [["sub", "108664048138407109954"], ["LIMIT", 1]]
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 388ms (ActiveRecord: 0.3ms)
+
+
+Started GET "/users/1" for ::1 at 2018-01-31 20:39:53 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_header.html.erb (1.6ms)
+  [1m[36mEntry Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 1], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (6.3ms)
+Completed 200 OK in 59ms (Views: 54.0ms | ActiveRecord: 0.5ms)
+
+
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT  "users".* FROM "users" LIMIT ?[0m  [["LIMIT", 11]]
+Started GET "/users/1" for ::1 at 2018-01-31 20:40:11 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (3.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Started DELETE "/logout" for ::1 at 2018-01-31 20:40:11 -0800
+Processing by SessionsController#destroy as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"VMRYOnii/dTR7xmogPUeNT6t3ocqrgSLDhM6xux5lXiZ4ufClWxmC3fX91LMSQQna4VEgcNca44+nWAjhepz1w=="}
+  Rendering users/show.html.erb within layouts/application
+Redirected to http://localhost:3000/
+Completed 302 Found in 15ms (ActiveRecord: 0.0ms)
+
+
+  Rendered users/_header.html.erb (3.1ms)
+  [1m[36mEntry Exists (1.3ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 1], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (28.4ms)
+Started GET "/" for ::1 at 2018-01-31 20:40:11 -0800
+Processing by UsersController#show as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :logged_in_user rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for ::1 at 2018-01-31 20:40:11 -0800
+Processing by SessionsController#new as HTML
+  Rendering sessions/new.html.erb within layouts/application
+  Rendered sessions/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 162ms (Views: 150.6ms | ActiveRecord: 4.7ms)
+
+
+Completed 200 OK in 56ms (Views: 49.9ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login" for ::1 at 2018-01-31 20:40:16 -0800
+Processing by SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"nMhuO1pDZU1j8HmPAZ6Um+U9W1Vx6mFwX9NWQcLXbRBR7tHDt43+ksXIl3VNIo6JsBXBU5gYDnVvXQykq0SLvw==", "id_token"=>"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2YzAxOGIyMzNmZTJlZWY0N2ZlZGJiZGQ5Mzk4MTcwZmM5YjI5ZDgifQ.eyJhenAiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMzMzNjE4NTUyMjktb21zZWdsMDJoN2dndnVyYnFrNHBqMGc2ZHJzNDk2anMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDM3MDAwNDk1NzkzNDUxNzI4NTUiLCJlbWFpbCI6ImtldmIzNG5zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiaDN3STlrR1FjcVFhdU81aWN3RDRpdyIsImV4cCI6MTUxNzQ2MzYxNiwiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImp0aSI6IjRhOGUxM2Y2MjA5ZDI3YTBjMDBiY2NkNWQyZWVjN2MwZTQ0YjIzNjQiLCJpYXQiOjE1MTc0NjAwMTYsIm5hbWUiOiJLZXZpbiBZYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQnJyUUUyWVFFd0kvQUFBQUFBQUFBQUkvQUFBQUFBQUFDUXcvbE93VmpjdnZLN00vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IktldmluIiwiZmFtaWx5X25hbWUiOiJZYW5nIiwibG9jYWxlIjoiZW4ifQ.sGe-dwXOLApiUVVcjDrcTvALjPhZizgexN-2ihn_GPtTKZglRFV2J3jSKuduZMZxxRzgXSsjnk1wEqfdS7y9pzBm3oETM7X8kklMVona73P7Dgdi_fNpvxWgC_wBhPGJLHcKPOjeLhk0WlPU4H7xdiJMhEpLaCKxrh65tTf7ci6fxzGoy3M3Sb69lsOTZF2AZvHFncRj0121_o1uhuTZra8PeFA-iXv9u1yJ0x2V_99iZ0d06bPDq4_LY8A4IqPzmXYcD8_2YE7CleLpiQjbktEpj6cjHU5x6gcd6A7hsTD9n45rrWOEaZwgo3R8tVMM4Tda7nPVuQCK8ueo9atllg"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."sub" = ? LIMIT ?[0m  [["sub", "103700049579345172855"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35mSQL (9.1ms)[0m  [1m[32mINSERT INTO "users" ("given_name", "family_name", "created_at", "updated_at", "sub") VALUES (?, ?, ?, ?, ?)[0m  [["given_name", "Kevin"], ["family_name", "Yang"], ["created_at", "2018-02-01 04:40:16.761718"], ["updated_at", "2018-02-01 04:40:16.761718"], ["sub", "103700049579345172855"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+Redirected to http://localhost:3000/users/2
+Completed 302 Found in 396ms (ActiveRecord: 10.9ms)
+
+
+Started GET "/users/2" for ::1 at 2018-01-31 20:40:16 -0800
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_header.html.erb (1.3ms)
+  [1m[36mEntry Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "entries" WHERE "entries"."user_id" = ? LIMIT ?[0m  [["user_id", 2], ["LIMIT", 1]]
+  Rendered users/show.html.erb within layouts/application (7.7ms)
+Completed 200 OK in 56ms (Views: 49.8ms | ActiveRecord: 0.4ms)
+
+
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" LIMIT ?[0m  [["LIMIT", 11]]
+Started GET "/react" for ::1 at 2018-01-31 21:19:55 -0800
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (15.6ms)
+Completed 200 OK in 3342ms (Views: 3325.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:20:32 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (18.2ms)
+Completed 200 OK in 113ms (Views: 110.0ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:21:18 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (21.5ms)
+Completed 200 OK in 85ms (Views: 80.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:21:40 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (17.3ms)
+Completed 200 OK in 157ms (Views: 153.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:21:46 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (22.0ms)
+Completed 200 OK in 214ms (Views: 201.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:21:52 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (14.1ms)
+Completed 200 OK in 115ms (Views: 111.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/react/login" for ::1 at 2018-01-31 21:21:58 -0800
+  
+ActionController::RoutingError (No route matches [GET] "/react/login"):
+  
+actionpack (5.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:63:in `call'
+web-console (3.5.1) lib/web_console/middleware.rb:135:in `call_app'
+web-console (3.5.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `catch'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (5.1.4) lib/rails/rack/logger.rb:36:in `call_app'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `block in tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:26:in `tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `tagged'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/remote_ip.rb:79:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/request_id.rb:25:in `call'
+rack (2.0.3) lib/rack/method_override.rb:22:in `call'
+rack (2.0.3) lib/rack/runtime.rb:22:in `call'
+activesupport (5.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:27:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/executor.rb:12:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/static.rb:125:in `call'
+rack (2.0.3) lib/rack/sendfile.rb:111:in `call'
+webpacker (3.2.1) lib/webpacker/dev_server_proxy.rb:18:in `perform_request'
+rack-proxy (0.6.3) lib/rack/proxy.rb:57:in `call'
+railties (5.1.4) lib/rails/engine.rb:522:in `call'
+puma (3.11.0) lib/puma/configuration.rb:225:in `call'
+puma (3.11.0) lib/puma/server.rb:624:in `handle_request'
+puma (3.11.0) lib/puma/server.rb:438:in `process_client'
+puma (3.11.0) lib/puma/server.rb:302:in `block in run'
+puma (3.11.0) lib/puma/thread_pool.rb:120:in `block in spawn_thread'
+Started GET "/react/login" for ::1 at 2018-01-31 21:23:14 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (15.8ms)
+Completed 200 OK in 94ms (Views: 90.8ms)
+
+
+Started GET "/react/login" for ::1 at 2018-01-31 21:26:40 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (18.4ms)
+Completed 200 OK in 103ms (Views: 100.4ms)
+
+
+Started GET "/react" for ::1 at 2018-01-31 21:26:50 -0800
+Processing by PagesController#home as HTML
+  Rendering pages/home.html.erb within layouts/application
+  Rendered pages/home.html.erb within layouts/application (20.6ms)
+Completed 200 OK in 104ms (Views: 99.4ms)
+
+
