@@ -1,9 +1,15 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 
 class Journal extends React.Component {
   render () {
     return (
-      <div>Journal</div>
+      <div>
+        {this.props.user === 'null' &&
+          <Redirect to={'/react/login/'} />
+        }
+        {this.props.user}
+      </div>
     )
   }
 }

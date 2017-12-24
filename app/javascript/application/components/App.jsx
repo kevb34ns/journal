@@ -11,16 +11,22 @@ class App extends React.Component {
 
   render () {
     return (
-      <Router>
+      <Router user={this.props.user}>
         <main>
           <Route
             exact={true}
             path='/react/'
-            component={Journal}
+            user={this.props.user}
+            render={(routeProps) =>
+              <Journal {...this.props} {...routeProps} />
+            }
           />
           <Route
             path='/react/login/'
-            component={Login}
+            user={this.props.user}
+            render={(routeProps) =>
+              <Login {...this.props} {...routeProps} />
+            }
           />
         </main>
       </Router>

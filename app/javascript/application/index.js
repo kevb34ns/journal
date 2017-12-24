@@ -3,4 +3,4 @@ import ReactDOM from 'react-dom'
 import App from './components/App'
 
 const hook = document.querySelector('#hook')
-ReactDOM.render(<App />, hook)
+ReactDOM.render(<App user={hook.dataset.user} />, hook)
