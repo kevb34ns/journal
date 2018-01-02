@@ -7,8 +7,7 @@ const ENTRY_FOLDER = 'entries';
 let entryFolderId;
 let drive;
 
-export function authPlatformLoaded() {
-  console.log("hey")
+export function authPlatformLoaded () {
   gapi.signin2.render('sign-in-button', {
     'scope': SCOPES,
     'onsuccess': onSignIn,
@@ -24,7 +23,7 @@ export function authPlatformLoaded() {
   }); 
 }
 
-function drivePlatformLoaded() {
+export function drivePlatformLoaded () {
   var auth2;
   gapi.load('auth2:client', () => {
     gapi.client.init({
@@ -73,7 +72,7 @@ function drivePlatformLoaded() {
   });
 }
 
-function onSignIn(googleUser) {
+function onSignIn (googleUser) {
   // refreshes token on sign in, extending token expiration
   /**
    * TODO this will send a POST request to /login on every page, which causes
@@ -85,17 +84,26 @@ function onSignIn(googleUser) {
    *    behavior would be to just log the other user in, which probably isn't wise
    */
   googleUser.reloadAuthResponse().then(() => {
-    // add id_token to form parameters and submit the form
-    $('#id_token').val(googleUser.getAuthResponse().id_token);
-    $('#new_user').submit();
+    // submit AJAX POST request to login api
+    $.post({
+      url: "/login/",
+      data: { "id_token": googleUser.getAuthResponse().id_token },
+      dataType: "json",
+      success: (res) => {
+        location.reload()
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   })
 }
 
-function onFailedSignIn(error) {
+function onFailedSignIn (error) {
   console.log(error);
 }
 
-function uploadFile(name, content, mimeType, folderId) {
+export function uploadFile (name, content, mimeType, folderId) {
   var boundary = Math.random().toString(36).slice(2);
   var requestType = `multipart/related; boundary="${boundary}"`;
   var metadata = {
@@ -128,7 +136,7 @@ function extractTitle(text) {
   return text.slice(0, i).trim();
 }
 
-function createEntry(text) {
+export function createEntry (text) {
   if (drive === undefined) {
     //TODO an error has occurred, drive is not loaded
     return false;
@@ -154,7 +162,7 @@ function createEntry(text) {
   );
 }
 
-function displayEntries() {
+export function displayEntries () {
   if (drive === undefined) {
     return false;
   }
@@ -181,7 +189,7 @@ function displayEntries() {
   });
 }
 
-function generateTitle(title) {
+function generateTitle (title) {
   var result = title.trim();
   if (result.length != 0) {
     return result;
@@ -190,7 +198,7 @@ function generateTitle(title) {
   }
 }
 
-function displayEntry(fileId) {
+export function displayEntry (fileId) {
   downloadEntry(fileId).then((response) => {
     $('#entry_field').text(response.body);
   });  
@@ -201,7 +209,7 @@ function displayEntry(fileId) {
  * @param {string} fileId The Drive id of the desired file.
  * @return {string} The contents of the desired file.
  */
-function downloadEntry(fileId) {
+export function downloadEntry (fileId) {
   if (drive === undefined) {
     return null
   }
@@ -212,7 +220,7 @@ function downloadEntry(fileId) {
   });
 }
 
-function signOut() {
+export function signOut () {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(() => {
     console.log('User signed out.');
