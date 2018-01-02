@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
       end
       # Log in
       log_in @user
-      redirect_to @user
+      # redirect_to @user
     end
   end
 
