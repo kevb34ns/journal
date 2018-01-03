@@ -1,4 +1,8 @@
 class EntriesController < ApplicationController
+  def index
+    @entries = current_user.entries
+    render json: @entries
+  end
 
   def create
     @entry = current_user.entries.build file_id: params[:file_id],

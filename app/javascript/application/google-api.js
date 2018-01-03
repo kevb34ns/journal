@@ -1,30 +1,30 @@
-const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
-const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com';
-const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata'
+const CLIENT_ID = '233361855229-omsegl02h7ggvurbqk4pj0g6drs496js.apps.googleusercontent.com'
+const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
 
-const ENTRY_FOLDER = 'entries';
+const ENTRY_FOLDER = 'entries'
 
-let entryFolderId;
-let drive;
+let entryFolderId
+let drive
 
 export function authPlatformLoaded () {
   gapi.signin2.render('sign-in-button', {
     'scope': SCOPES,
     'onsuccess': onSignIn,
     'onfailure': onFailedSignIn
-  });
+  })
 
-  var auth2;
+  var auth2
   gapi.load('auth2', () => {
-    auth2 = gapi.auth2.getAuthInstance();
+    auth2 = gapi.auth2.getAuthInstance()
     if (!auth2.isSignedIn.get()) {
-      $('#sign-in-button').css('display', 'block');
+      $('#sign-in-button').css('display', 'block')
     }
-  }); 
+  })
 }
 
 export function drivePlatformLoaded () {
-  var auth2;
+  var auth2
   gapi.load('auth2:client', () => {
     gapi.client.init({
       apiKey: 'AIzaSyCTeQrI1BY-9gwhf8Iyw1xRasmMH82oM2Q',
@@ -34,9 +34,9 @@ export function drivePlatformLoaded () {
     }).then(() => {
       // TODO handle changes to user sign-in state
       // TODO refactor this for re-usability
-      drive = gapi.client.drive;
-      if(drive === undefined) {
-        return;
+      drive = gapi.client.drive
+      if (drive === undefined) {
+        return
       }
 
       drive.files.list({
@@ -44,32 +44,32 @@ export function drivePlatformLoaded () {
         'q': `mimeType='application/vnd.google-apps.folder' and \
               name='${ENTRY_FOLDER}' and \
               'appDataFolder' in parents`,
-        'spaces': "appDataFolder",
-        'fields': "files(id, name)"
+        'spaces': 'appDataFolder',
+        'fields': 'files(id, name)'
       }).then((response) => {
-        if (response.result.files.length == 0) {
+        if (response.result.files.length === 0) {
           // create entries folder
           drive.files.create({
             'name': ENTRY_FOLDER,
             'mimeType': 'application/vnd.google-apps.folder',
             'parents': ['appDataFolder'],
-            'fields': 'id'  
+            'fields': 'id'
           }).then((response) => {
-            entryFolderId = response.result.id;
-          });
+            entryFolderId = response.result.id
+          })
         } else {
-          entryFolderId = response.result.files[0].id;
-          displayEntries();
+          entryFolderId = response.result.files[0].id
+          displayEntries()
         }
-      });
+      })
       
       // TODO demo: get profile image
       let profile = gapi.auth2.getAuthInstance()
                               .currentUser.get()
-                              .getBasicProfile();
-      $(".profile-image").attr('src', profile.getImageUrl());
+                              .getBasicProfile()
+      $('.profile-image').attr('src', profile.getImageUrl())
     })
-  });
+  })
 }
 
 function onSignIn (googleUser) {
@@ -83,42 +83,43 @@ function onSignIn (googleUser) {
    *    logged in user are the same; otherwise, you must do something. The default
    *    behavior would be to just log the other user in, which probably isn't wise
    */
-  googleUser.reloadAuthResponse().then(() => {
-    // submit AJAX POST request to login api
-    $.post({
-      url: "/login/",
-      data: { "id_token": googleUser.getAuthResponse().id_token },
-      dataType: "json",
-      success: (res) => {
-        location.reload()
-      },
-      error: (err) => {
-        console.log(err)
-      }
+  googleUser.reloadAuthResponse()
+    .then(() => {
+      // submit AJAX POST request to login api
+      $.post({
+        url: '/login/',
+        data: { 'id_token': googleUser.getAuthResponse().id_token },
+        dataType: 'json',
+        success: (res) => {
+          location.reload()
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      })
     })
-  })
 }
 
 function onFailedSignIn (error) {
-  console.log(error);
+  console.log(error)
 }
 
 export function uploadFile (name, content, mimeType, folderId) {
-  var boundary = Math.random().toString(36).slice(2);
-  var requestType = `multipart/related; boundary="${boundary}"`;
+  var boundary = Math.random().toString(36).slice(2)
+  var requestType = `multipart/related; boundary='${boundary}'`
   var metadata = {
     'name': name,
     'mimeType': mimeType,
     'parents': [folderId]
-  };
+  }
 
-  var body = 
+  var body =
     `\r\n--${boundary}\r\n` +
     `Content-Type: application/json; charset=UTF=8\r\n\r\n` +
     `${JSON.stringify(metadata)}\r\n` +
     `\r\n--${boundary}\r\n` +
     `Content-Type: text/plain\r\n\r\n${content}` +
-    `\r\n--${boundary}--`;
+    `\r\n--${boundary}--`
 
   return gapi.client.request({
     'path': '/upload/drive/v3/files',
@@ -126,82 +127,95 @@ export function uploadFile (name, content, mimeType, folderId) {
     'params': { 'uploadType': 'multipart' },
     'headers': { 'Content-Type': requestType },
     'body': body
-  });
+  })
 }
 
-function extractTitle(text) {
-
-  var i = text.indexOf('\n');
-
-  return text.slice(0, i).trim();
+function extractTitle (text) {
+  var i = text.indexOf('\n')
+  return text.slice(0, i).trim()
 }
 
 export function createEntry (text) {
   if (drive === undefined) {
-    //TODO an error has occurred, drive is not loaded
-    return false;
+    // TODO an error has occurred, drive is not loaded
+    return false
   }
 
-  var title = extractTitle(text);
+  var title = extractTitle(text)
 
   uploadFile(generateTitle(title), text, 'text/plain', entryFolderId).then(
     (response) => {
-      console.log(response);
+      console.log(response)
       $.post({
-        url: "/entries",
-        data: { "file_id": response.result.id },
-        dataType: "json",
+        url: '/entries',
+        data: { 'file_id': response.result.id },
+        dataType: 'json',
         success: (entry) => {
-          location.reload();
+          location.reload()
         },
         error: (err) => {
-          console.log(err);
+          console.log(err)
         }
-      });
+      })
     }
-  );
+  )
+}
+
+export function getEntries () {
+  // use ajax to get entry objects from backend
+  // use drive API to fill file names
+  // return objects in a promise
+
+  // TODO, when you create the entry in Drive, get the created time from the result and send it to rails to set in the DB so they are the same
+  return $.get({
+    url: '/entries',
+    dataType: 'json'
+  }).then((entries) => {
+    // TODO match drive entries to rails results
+    return entries
+  })
 }
 
 export function displayEntries () {
   if (drive === undefined) {
-    return false;
+    return false
   }
 
   drive.files.list({
     'q': `mimeType='text/plain' and \
           '${entryFolderId}' in parents`,
-    'spaces': "appDataFolder",
-    'fields': "files(id, name)",
-    'orderBy': "createdTime desc"
+    'spaces': 'appDataFolder',
+    'fields': 'files(id, name)',
+    'orderBy': 'createdTime desc'
   }).then((response) => {
     response.result.files.forEach((file, index) => {
-      var entry = $(`.entry#${file.id}`);
+      var entry = $(`.entry#${file.id}`)
       if (entry.length === 0) {
-        return;
+        return
       }
 
-      entry.find('.entry_title').text(file.name);
+      entry.find('.entry_title').text(file.name)
       if (entry[0] === $('.entries_list .entry:first-of-type')[0]) {
         // Download text of first entry and set the entry display section
-        displayEntry(file.id);
+        displayEntry(file.id)
       }
-    });
-  });
+    })
+  })
 }
 
 function generateTitle (title) {
-  var result = title.trim();
-  if (result.length != 0) {
-    return result;
+  var result = title.trim()
+  if (result.length !== 0) {
+    return result
   } else {
-    return "Untitled Entry";
+    return 'Untitled Entry'
   }
 }
 
 export function displayEntry (fileId) {
   downloadEntry(fileId).then((response) => {
-    $('#entry_field').text(response.body);
-  });  
+    $('#entry_field').text(response.body)
+  })
 }
 
 /**
@@ -221,9 +235,9 @@ export function downloadEntry (fileId) {
 }
 
 export function signOut () {
-  var auth2 = gapi.auth2.getAuthInstance();
+  var auth2 = gapi.auth2.getAuthInstance()
   auth2.signOut().then(() => {
-    console.log('User signed out.');
-    $('.logout_user').submit();
-  });
+    console.log('User signed out.')
+    $('.logout_user').submit()
+  })
 }

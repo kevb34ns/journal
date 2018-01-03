@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   get '/react/login', to: 'pages#home'
 
   resources :users, only: [:show, :destroy]
-  resources :entries, only: [:create, :destroy]
+  resources :entries, only: [:index, :create, :update, :destroy]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

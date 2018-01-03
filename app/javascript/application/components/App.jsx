@@ -8,13 +8,12 @@ import Login from './Login'
 import Journal from './Journal'
 
 class App extends React.Component {
-
   render () {
     return (
       <Router user={this.props.user}>
         <main>
           <Route
-            exact={true}
+            exact='true'
             path='/react/'
             user={this.props.user}
             render={(routeProps) =>

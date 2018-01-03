@@ -8,17 +8,36 @@ import EntryList from './EntryList'
 import * as gapiInterface from '../google-api'
 
 class Journal extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      entries: []
+    }
+  }
 
   loadGoogleDriveApi () {
     const script = document.createElement('script')
     script.id = 'drive-script'
     script.src = 'https://apis.google.com/js/platform.js'
-    script.onload = () => gapiInterface.drivePlatformLoaded()
     document.body.appendChild(script)
+
+    return new Promise((resolve, reject) => {
+      script.onload = () => {
+        gapiInterface.drivePlatformLoaded()
+        resolve()
+      }
+    })
   }
 
   componentDidMount () {
-    this.loadGoogleDriveApi()
+    this.loadGoogleDriveApi().then(() => {
+      return gapiInterface.getEntries()
+    })
+    .then((entries) => {
+      this.setState({
+        entries: entries
+      })
+    })
   }
 
   componentWillUnmount () {
@@ -27,17 +46,19 @@ class Journal extends React.Component {
   }
 
   render () {
+    const user = this.props.user
+
     return (
-      <div>
-        {this.props.user === 'null' &&
+      <div className='outer_container'>
+        {user === 'null' &&
           <Redirect to={'/react/login/'} />
         }
 
-        <Header user={this.props.user} />
+        <Header user={user} />
         <EntryDisplay />
-        <EntryList />
+        <EntryList entries={this.state.entries} />
         <div>
-          {this.props.user}
+          {user}
         </div>
       </div>
     )

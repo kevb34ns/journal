@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom'
 import * as gapiInterface from '../google-api'
 
 class Login extends React.Component {
-
   loadGoogleAuthApi () {
     const script = document.createElement('script')
     script.id = 'auth-script'
@@ -28,7 +27,7 @@ class Login extends React.Component {
         {this.props.user !== 'null' &&
           <Redirect to={'/react/'} />
         }
-        <div id="sign-in-button" style={{display:'none'}}></div>
+        <div id='sign-in-button' style={{display: 'none'}} />
       </div>
     )
   }
