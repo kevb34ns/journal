@@ -11,7 +11,7 @@ class Journal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      entries: []
+      entryMap: {}
     }
   }
 
@@ -23,19 +23,16 @@ class Journal extends React.Component {
 
     return new Promise((resolve, reject) => {
       script.onload = () => {
-        gapiInterface.drivePlatformLoaded()
-        resolve()
+        gapiInterface.drivePlatformLoaded().then(() => resolve())
       }
     })
   }
 
   componentDidMount () {
-    this.loadGoogleDriveApi().then(() => {
-      return gapiInterface.getEntries()
-    })
-    .then((entries) => {
+    this.loadGoogleDriveApi().then(() => gapiInterface.getEntries())
+    .then((entryMap) => {
       this.setState({
-        entries: entries
+        entryMap: entryMap
       })
     })
   }
@@ -56,7 +53,7 @@ class Journal extends React.Component {
 
         <Header user={user} />
         <EntryDisplay />
-        <EntryList entries={this.state.entries} />
+        <EntryList entries={Object.values(this.state.entryMap)} />
         <div>
           {user}
         </div>

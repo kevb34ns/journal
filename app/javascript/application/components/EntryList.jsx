@@ -3,9 +3,9 @@ import React from 'react'
 class EntryList extends React.Component {
   render () {
     const entries = this.props.entries
-    console.log(entries)
     return (
       <section className='menu'>
+        {entries &&
         <ol className='entries_list'>
           {entries.map(entry => (
             <li className='entry'
@@ -13,10 +13,11 @@ class EntryList extends React.Component {
               key={entry.file_id}
               onClick={() => null}>
               <p className='entry_title'>{entry.title}</p>
-              <p className='entry.date'>{entry.created_at}</p>
+              <p className='entry_date'>{entry.created_at}</p>
             </li>
           ))}
         </ol>
+        }
       </section>
     )
   }

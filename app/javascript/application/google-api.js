@@ -25,51 +25,61 @@ export function authPlatformLoaded () {
 
 export function drivePlatformLoaded () {
   var auth2
-  gapi.load('auth2:client', () => {
-    gapi.client.init({
-      apiKey: 'AIzaSyCTeQrI1BY-9gwhf8Iyw1xRasmMH82oM2Q',
-      clientId: CLIENT_ID,
-      discoveryDocs: DISCOVERY_DOCS,
-      scope: SCOPES
-    }).then(() => {
-      // TODO handle changes to user sign-in state
-      // TODO refactor this for re-usability
-      drive = gapi.client.drive
-      if (drive === undefined) {
-        return
-      }
+  return new Promise((resolve, reject) => {
+    gapi.load('auth2:client', () => {
+      return gapi.client.init({
+        apiKey: 'AIzaSyCTeQrI1BY-9gwhf8Iyw1xRasmMH82oM2Q',
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+      })
+      .then(() => {
+        // TODO handle changes to user sign-in state
+        drive = gapi.client.drive
+        if (drive === undefined) {
+          throw new Error('Drive API did not load correctly')
+        }
 
-      drive.files.list({
-        // find the entries/ folder in the appDataFolder, or create it
-        'q': `mimeType='application/vnd.google-apps.folder' and \
-              name='${ENTRY_FOLDER}' and \
-              'appDataFolder' in parents`,
-        'spaces': 'appDataFolder',
-        'fields': 'files(id, name)'
-      }).then((response) => {
-        if (response.result.files.length === 0) {
-          // create entries folder
-          drive.files.create({
-            'name': ENTRY_FOLDER,
-            'mimeType': 'application/vnd.google-apps.folder',
-            'parents': ['appDataFolder'],
-            'fields': 'id'
-          }).then((response) => {
-            entryFolderId = response.result.id
-          })
+        return drive.files.list({
+          // find the entries/ folder in the appDataFolder, or create it
+          'q': `mimeType='application/vnd.google-apps.folder' and \
+                name='${ENTRY_FOLDER}' and \
+                'appDataFolder' in parents`,
+          'spaces': 'appDataFolder',
+          'fields': 'files(id, name)'
+        })
+      })
+      .then((response) => {
+        if (response.result.files.length !== 0) {
+          return response
         } else {
-          entryFolderId = response.result.files[0].id
-          displayEntries()
+          return Promise.reject(
+            // create entries folder
+            drive.files.create({
+              'name': ENTRY_FOLDER,
+              'mimeType': 'application/vnd.google-apps.folder',
+              'parents': ['appDataFolder'],
+              'fields': 'id'
+            })
+          )
         }
       })
-      
-      // TODO demo: get profile image
-      let profile = gapi.auth2.getAuthInstance()
-                              .currentUser.get()
-                              .getBasicProfile()
-      $('.profile-image').attr('src', profile.getImageUrl())
+      .then((response) => {
+        entryFolderId = response.result.files[0].id
+        resolve()
+      }, (response) => {
+        entryFolderId = response.result.id
+        resolve()
+      })
     })
   })
+}
+
+function setProfilePicture () {
+  // TODO find better place for this
+  let profile = gapi.auth2.getAuthInstance()
+    .currentUser.get().getBasicProfile()
+  $('.profile-image').attr('src', profile.getImageUrl())
 }
 
 function onSignIn (googleUser) {
@@ -161,18 +171,49 @@ export function createEntry (text) {
   )
 }
 
+function getDbEntries () {
+  return $.get({
+    url: '/entries',
+    dataType: 'json'
+  })
+}
+
+function getDriveEntries () {
+  return drive.files.list({
+    'q': `mimeType='text/plain' and \
+          '${entryFolderId}' in parents`,
+    'spaces': 'appDataFolder',
+    'fields': 'files(id, name)',
+    'orderBy': 'createdTime desc'
+  }).then((response) => response.result.files)
+}
+
 export function getEntries () {
   // use ajax to get entry objects from backend
   // use drive API to fill file names
   // return objects in a promise
 
   // TODO, when you create the entry in Drive, get the created time from the result and send it to rails to set in the DB so they are the same
-  return $.get({
-    url: '/entries',
-    dataType: 'json'
-  }).then((entries) => {
-    // TODO match drive entries to rails results
-    return entries
+  return getDbEntries().then((entryArray) => {
+    // match drive entries to rails results
+    if (entryArray) {
+      const entryMap = {}
+      entryArray.forEach((entry) => {
+        entryMap[entry.file_id] = entry
+      })
+      return entryMap
+    } else {
+      return Promise.reject(new Error('GET /entries returned undefined'))
+    }
+  }).then((entryMap) => {
+    return getDriveEntries().then((files) => {
+      files.forEach((file) => {
+        if (file.id in entryMap) {
+          entryMap[file.id].title = file.name
+        }
+      })
+      return entryMap
+    })
   })
 }
 
@@ -227,11 +268,11 @@ export function downloadEntry (fileId) {
   if (drive === undefined) {
     return null
   }
-  
+
   return drive.files.get({
     'fileId': fileId,
     'alt': 'media'
-  });
+  })
 }
 
 export function signOut () {
