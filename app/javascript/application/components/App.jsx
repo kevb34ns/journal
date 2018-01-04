@@ -13,7 +13,7 @@ class App extends React.Component {
       <Router user={this.props.user}>
         <main>
           <Route
-            exact='true'
+            exact={true}
             path='/react/'
             user={this.props.user}
             render={(routeProps) =>
