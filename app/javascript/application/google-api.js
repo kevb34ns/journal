@@ -253,12 +253,6 @@ function generateTitle (title) {
   }
 }
 
-export function displayEntry (fileId) {
-  downloadEntry(fileId).then((response) => {
-    $('#entry_field').text(response.body)
-  })
-}
-
 /**
  * Download a file from Drive and return the response as a Promise.
  * @param {string} fileId The Drive id of the desired file.

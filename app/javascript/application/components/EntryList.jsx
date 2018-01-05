@@ -11,7 +11,7 @@ class EntryList extends React.Component {
             <li className='entry'
               id={entry.file_id}
               key={entry.file_id}
-              onClick={() => null}>
+              onClick={() => this.props.onEntryClicked(entry.file_id)} >
               <p className='entry_title'>{entry.title}</p>
               <p className='entry_date'>{entry.created_at}</p>
             </li>

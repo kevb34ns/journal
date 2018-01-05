@@ -10,9 +10,13 @@ import * as gapiInterface from '../google-api'
 class Journal extends React.Component {
   constructor (props) {
     super(props)
+
     this.state = {
-      entryMap: {}
+      entryMap: {},
+      selectedEntry: {}
     }
+
+    this.handleEntryClicked = this.handleEntryClicked.bind(this)
   }
 
   loadGoogleDriveApi () {
@@ -42,6 +46,30 @@ class Journal extends React.Component {
     script.parentNode.removeChild(script)
   }
 
+  setSelectedEntry (entry) {
+    this.setState({
+      selectedEntry: entry
+    })
+  }
+
+  handleEntryClicked (fileId) {
+    if (!(fileId in this.state.entryMap)) {
+      return
+    }
+
+    let entry = this.state.entryMap[fileId]
+    if (!entry.text) {
+      gapiInterface.downloadEntry(fileId)
+        .then((response) => {
+          // TODO technically violating React immutability rules
+          entry.text = response.body
+          this.setSelectedEntry(entry)
+        })
+    } else {
+      this.setSelectedEntry(entry)
+    }
+  }
+
   render () {
     const user = this.props.user
 
@@ -52,11 +80,10 @@ class Journal extends React.Component {
         }
 
         <Header user={user} />
-        <EntryDisplay />
-        <EntryList entries={Object.values(this.state.entryMap)} />
-        <div>
-          {user}
-        </div>
+        <EntryDisplay selectedEntry={this.state.selectedEntry} />
+        <EntryList
+          entries={Object.values(this.state.entryMap)}
+          onEntryClicked={this.handleEntryClicked} />
       </div>
     )
   }
